@@ -1,6 +1,6 @@
 <div align="center">
   <img src="../build/appicon.png" style="width:160px" alt="Xianyu-Auto"/>
-  <h1>Xianyu-Auto</h1>
+  <h1>Xianyu-Box</h1>
   <p>一个简易的 Mihomo 桌面客户端</p>
 </div>
 

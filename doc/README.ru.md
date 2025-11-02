@@ -1,6 +1,6 @@
 <div align="center">
-  <img src="../build/appicon.png" style="width:160px" alt="Xianyu-Auto"/>
-  <h1>Xianyu-Auto</h1>
+  <img src="../build/appicon.png" style="width:160px" alt="Xianyu-Box"/>
+  <h1>Xianyu-Box</h1>
   <p>Простой настольный клиент Mihomo</p>
 </div>
 
@@ -32,7 +32,7 @@
 
 ## Импорт профилей через Deeplink
 
-Xianyu-Auto поддерживает импорт профилей через deeplink URL, что позволяет пользователям легко добавлять подписки из внешних источников.
+Xianyu-Box поддерживает импорт профилей через deeplink URL, что позволяет пользователям легко добавлять подписки из внешних источников.
 
 ### Схема URL
 

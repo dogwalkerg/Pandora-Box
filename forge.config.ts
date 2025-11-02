@@ -19,11 +19,11 @@ const config: ForgeConfig = {
         extendInfo: {
             LSMinimumSystemVersion: "10.13.0"
         },
-        appBundleId: 'com.snakem982.pandora-box',
+        appBundleId: 'com.snakem982.Xianyu-Box',
         protocols: [
             {
-                name: 'Pandora-Box Protocol',
-                schemes: ['pandora-box']
+                name: 'Xianyu-Box Protocol',
+                schemes: ['Xianyu-Box']
             }
         ],
     },

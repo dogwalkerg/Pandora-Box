@@ -76,7 +76,7 @@ ipcMain.on('update-menu', (event, menuTemplate) => {
 
 const initMenu = () => createMenu([
     {
-        label: 'Pandora-Box', submenu: [
+        label: 'Xianyu-Box', submenu: [
             {
                 label: 'Quit', accelerator: 'Cmd+Q', click: readyToQuit
             }

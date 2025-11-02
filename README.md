@@ -1,8 +1,8 @@
 <div align="center">
 
-  <img src="build/appicon.png" width="160px" alt="Xianyu-Auto"/>
+  <img src="build/appicon.png" width="160px" alt="Xianyu-Box"/>
 
-  <h1>Xianyu-Auto</h1>
+  <h1>Xianyu-Box</h1>
 
   <p>🌈 A simple desktop client for <strong>Mihomo</strong></p>
   <p>✨ 一个简易的 <strong>Mihomo</strong> 桌面客户端</p>
