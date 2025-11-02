@@ -6,7 +6,7 @@ import AutoLaunch from 'auto-launch';
 import log from './log';
 import {storeGet, storeSet} from './store';
 
-const APP_NAME = 'Xianyu-Auto';
+const APP_NAME = 'Xianyu-AUTO';
 const BOOT_FLAG = '--boot-launch';
 
 let autoLauncher = createAutoLauncher();

@@ -1,6 +1,6 @@
 {
-  "name": "Xianyu-Auto",
-  "productName": "Xianyu-Auto",
+  "name": "Pandora-Box",
+  "productName": "Pandora-Box",
   "version": "1.0.1",
   "description": "A Simple Mihomo GUI",
   "main": ".vite/build/main.js",
