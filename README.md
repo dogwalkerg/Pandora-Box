@@ -1,8 +1,8 @@
 <div align="center">
 
-  <img src="build/appicon.png" width="160px" alt="Pandora-Box"/>
+  <img src="build/appicon.png" width="160px" alt="Xianyu-Auto"/>
 
-  <h1>Pandora-Box</h1>
+  <h1>Xianyu-Auto</h1>
 
   <p>🌈 A simple desktop client for <strong>Mihomo</strong></p>
   <p>✨ 一个简易的 <strong>Mihomo</strong> 桌面客户端</p>

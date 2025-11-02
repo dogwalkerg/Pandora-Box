@@ -1,6 +1,6 @@
 <div align="center">
-  <img src="../build/appicon.png" style="width:160px" alt="Pandora-Box"/>
-  <h1>Pandora-Box</h1>
+  <img src="../build/appicon.png" style="width:160px" alt="Xianyu-Auto"/>
+  <h1>Xianyu-Auto</h1>
   <p>A simple desktop client for Mihomo</p>
 </div>
 
@@ -32,7 +32,7 @@
 
 ## Deeplink Profile Import
 
-Pandora-Box supports importing profiles via deeplink URLs, allowing users to easily add subscriptions from external sources.
+Xianyu-Auto supports importing profiles via deeplink URLs, allowing users to easily add subscriptions from external sources.
 
 ### URL Scheme
 

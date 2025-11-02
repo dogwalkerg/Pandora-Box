@@ -1,6 +1,6 @@
 <div align="center">
-  <img src="../build/appicon.png" style="width:160px" alt="Pandora-Box"/>
-  <h1>Pandora-Box</h1>
+  <img src="../build/appicon.png" style="width:160px" alt="Xianyu-Auto"/>
+  <h1>Xianyu-Auto</h1>
   <p>一个简易的 Mihomo 桌面客户端</p>
 </div>
 
@@ -32,7 +32,7 @@
 
 ## 深度链接配置导入
 
-Pandora-Box 支持通过深度链接 URL 导入配置，让用户可以轻松地从外部来源添加订阅。
+Xianyu-Auto 支持通过深度链接 URL 导入配置，让用户可以轻松地从外部来源添加订阅。
 
 ### URL 格式
 

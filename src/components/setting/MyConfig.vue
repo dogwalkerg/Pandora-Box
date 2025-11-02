@@ -141,7 +141,7 @@ function checkUpdate() {
     <el-col :span="24">
       <div class="box box2">
         <div class="title">
-          Pandora-Box
+          Xianyu-Auto
         </div>
         <hr/>
         <ul class="info-list">
