@@ -1,6 +1,6 @@
 {
-  "name": "Pandora-Box",
-  "productName": "Pandora-Box",
+  "name": "闲鱼-Box",
+  "productName": "闲鱼-Box",
   "version": "1.0.1",
   "description": "A Simple Mihomo GUI",
   "main": ".vite/build/main.js",
