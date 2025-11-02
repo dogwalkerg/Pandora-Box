@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-var BName = []byte("Xianyu-Box")
+var BName = []byte("Pandora-Box")
 var BDb *bbolt.DB
 
 func GetDBInstance() *bbolt.DB {
