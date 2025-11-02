@@ -6,7 +6,7 @@
     <div class="left">
       <div :class="isWindows?'top-title win':'top-title'">
         <div class="top-icon"></div>
-        <span class="top-title-text">XianyuAuto</span>
+        <span class="top-title-text">闲鱼-Box</span>
       </div>
       <MyEvent/>
       <MyNav/>
