@@ -1,8 +1,8 @@
 {
-  "name": "Pandora-Box",
-  "productName": "Xianyu-Box",
+  "name": "Xianyu-Box",
+  "productName": "Pandora-Box",
   "version": "1.0.1",
-  "description": "A Simple Mihomo GUI",
+  "description": "A Simple Xianyu GUI",
   "main": ".vite/build/main.js",
   "scripts": {
     "start": "electron-forge start",
