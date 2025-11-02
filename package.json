@@ -1,6 +1,6 @@
 {
   "name": "Xianyu-Box",
-  "productName": "Pandora-Box",
+  "productName": "Xianyu-Box",
   "version": "1.0.1",
   "description": "A Simple Xianyu GUI",
   "main": ".vite/build/main.js",
