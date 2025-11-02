@@ -31,7 +31,7 @@ const config: ForgeConfig = {
     makers: [
         new MakerWix({
             manufacturer: 'snakem982',
-            description: 'A Simple Mihomo GUI',
+            description: 'A Simple Xianyu GUI',
             icon: 'build/appicon.ico',
             ui: {
                 chooseDirectory: true,
