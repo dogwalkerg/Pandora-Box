@@ -78,7 +78,7 @@ function checkUpdate() {
     <el-col :span="24">
       <div class="box box1">
         <div class="title">
-          Mihomo
+          闲鱼
         </div>
         <hr/>
         <ul class="info-list">
@@ -141,7 +141,7 @@ function checkUpdate() {
     <el-col :span="24">
       <div class="box box2">
         <div class="title">
-          Pandora-Box
+           闲鱼-Box
         </div>
         <hr/>
         <ul class="info-list">
