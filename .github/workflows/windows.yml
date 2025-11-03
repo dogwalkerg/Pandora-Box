@@ -82,7 +82,7 @@ jobs:
           if ($arch -eq "amd64") {
             $arch = "x64"
           }
-          Compress-Archive -Path out\Pandora-Box*\* -DestinationPath "windows-${{ matrix.arch }}-app.zip"
+          Compress-Archive -Path out\Xianyu-Box*\* -DestinationPath "windows-${{ matrix.arch }}-app.zip"
           Compress-Archive -Path out\make\wix\$arch\* -DestinationPath "windows-${{ matrix.arch }}-msi.zip"
 
       - name: Create GitHub Release
