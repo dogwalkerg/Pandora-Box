@@ -3,7 +3,7 @@ package constant
 import _ "embed"
 
 const (
-	DefaultWorkDir     = "Pandora-Box-V3"
+	DefaultWorkDir     = "Xianyu-Box-V3"
 	DefaultCrawlDir    = "crawl"
 	DefaultTemplateDir = "template"
 	DefaultServerDB    = "px-server.db"
