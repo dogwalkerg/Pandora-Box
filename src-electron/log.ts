@@ -40,6 +40,6 @@ export default {
         return logFilePath;
     },
     getHomeDir: () => {
-        return path.join(userHomeDir, 'Xianyu-Box-V3');
+        return path.join(userHomeDir, 'Pandora-Box-V3');
     }
 };
