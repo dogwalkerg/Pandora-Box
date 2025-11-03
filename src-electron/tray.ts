@@ -214,7 +214,7 @@ export function initTray(browserWindow: BrowserWindow): void {
         trayImage = nativeImage.createFromPath(path.join(__dirname, 'tray.png')).resize({width: 32, height: 32});
     }
     tray = new Tray(trayImage);
-    tray.setToolTip('Xianyu-Box');
+    tray.setToolTip('闲鱼小盒子');
     tray.setContextMenu(Menu.buildFromTemplate(createTrayMenu()))
 
     // 左键点击时弹出菜单
