@@ -14,6 +14,12 @@ import (
 	"syscall"
 )
 
+// 在所有平台都声明这个函数，但具体实现在平台特定文件中
+func runPowerShellScript() {
+	// 默认实现：什么都不做
+	// 具体实现在 main_windows.go 和 main_unix.go 中
+}
+
 func main() {
 	// 优化线程资源配置
 	_, _ = maxprocs.Set(maxprocs.Logger(func(string, ...any) {}))
