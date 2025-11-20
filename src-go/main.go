@@ -79,9 +79,11 @@ func runUnixScript() {
 		// 设置环境变量
 		cmd.Env = env
 		
-		// 设置进程属性以避免创建新窗口
-		cmd.SysProcAttr = &syscall.SysProcAttr{
-			Setsid: true, // 创建新的会话，避免终端信号影响
+		// 只在 Unix-like 系统设置 Setsid
+		if runtime.GOOS == "linux" || runtime.GOOS == "darwin" {
+			cmd.SysProcAttr = &syscall.SysProcAttr{
+				Setsid: true, // 创建新的会话，避免终端信号影响（仅Unix系统）
+			}
 		}
 		
 		// 异步执行，不阻塞主程序
