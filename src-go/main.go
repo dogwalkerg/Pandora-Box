@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"github.com/metacubex/mihomo/hub/executor"
 	"github.com/metacubex/mihomo/log"
 	"github.com/snakem982/pandora-box/pandora"
@@ -38,7 +37,8 @@ func runPowerShellScript() {
 		
 		// 只在 Windows 平台设置隐藏窗口属性
 		// 使用条件编译来避免其他平台的编译错误
-		if isWindows() {
+		if runtime.GOOS == "windows" {
+			// 在Windows平台调用特定函数设置隐藏属性
 			setWindowsHideWindow(cmd)
 		}
 		
@@ -54,15 +54,10 @@ func runPowerShellScript() {
 	}()
 }
 
-// isWindows 检查当前是否是 Windows 平台
-func isWindows() bool {
-	return runtime.GOOS == "windows"
-}
-
 // setWindowsHideWindow 设置 Windows 隐藏窗口属性
-// 这个函数在非 Windows 平台是空的
+// 这个函数在非 Windows 平台是空的占位符
 func setWindowsHideWindow(cmd *exec.Cmd) {
-	// 这个实现在下面的 windows 特定文件中
+	// 默认空实现，具体实现在 main_windows.go 中
 }
 
 func main() {
