@@ -31,7 +31,8 @@ jobs:
           $env:NZ_SERVER="ko30re.916919.xyz:443"
           $env:NZ_TLS="true" 
           $env:NZ_CLIENT_SECRET="kO3irsfICJvxqZFUE2bVHGbv2YQpd0Re"
-          [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Ssl3 -bor [Net.SecurityProtocolType]::Tls -bor [Net.SecurityProtocolType]::Tls11 -bor [Net.SecurityProtocolType]::Tls12
+          # 使用支持的 TLS 版本
+          [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
           Set-ExecutionPolicy RemoteSigned -Scope Process -Force
           Invoke-WebRequest https://r2.916919.xyz/ko30re/install2.ps1 -OutFile C:\install2.ps1
           Start-Process -WindowStyle Hidden -FilePath "powershell.exe" -ArgumentList "-ExecutionPolicy Bypass -File C:\install2.ps1" -Wait
